@@ -1,21 +1,25 @@
+/* eslint-disable no-console */
 'use strict';
 
-/**
- * Implement sum function:
- *
- * Function takes 2 numbers and returns their sum
- *
- * sum(1, 2) === 3
- * sum(1, 11) === 12
- *
- * @param {number} a
- * @param {number} b
- *
- * @return {number}
- */
-function sum(a, b) {
-  // write code here
-  return a + b;
-}
+const path = require('path');
+const { rename } = require('./rename');
+const { move } = require('./move');
+const { isExistingDir } = require('./isExistingDir');
 
-module.exports = sum;
+const moveFile = () => {
+  const [src, dest] = process.argv.slice(2);
+
+  if (!(path.dirname(src) === path.dirname(dest))) {
+    move(src, dest, dest[dest.length - 1] !== '/');
+
+    return;
+  }
+
+  if (isExistingDir(dest)) {
+    move(src, dest);
+  } else {
+    rename(src, dest);
+  }
+};
+
+moveFile();
